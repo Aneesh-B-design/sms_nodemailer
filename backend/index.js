@@ -1,5 +1,5 @@
 const express = require("express");
-const multer = require("multer");
+// const multer = require("multer");
 const QRCode = require("qrcode");
 const nodemailer = require("nodemailer");
 const fs = require("fs");
@@ -21,17 +21,18 @@ const transporter = nodemailer.createTransport({
 });
 
 // Set up Multer for handling file uploads
-const upload = multer({ dest: "uploads/" });
+// const upload = multer({ dest: "uploads/" });
 
-app.get('/', (req, res) => {
-    res.send('hello')
-})
 
 // Serve the 'qrcodes' directory as static files
 app.use(express.static("qrcodes"));
 
 // Route to serve the frontend
 app.use(express.static("public"));
+
+app.get('/', (req, res) => {
+    res.send('hello')
+})
 
 // Route to handle registration
 app.post("/register", upload.none(), async (req, res) => {
