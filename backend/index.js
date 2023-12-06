@@ -2,7 +2,7 @@ const express = require("express");
 // const multer = require("multer");
 const QRCode = require("qrcode");
 const nodemailer = require("nodemailer");
-const fs = require("fs");
+// const fs = require("fs");
 const cors = require("cors");
 
 const app = express();
@@ -362,7 +362,7 @@ background-image: linear-gradient(0deg, rgba(235, 192, 72, 1),rgba(255, 255, 255
         await transporter.sendMail(mailOptions);
 
         // Clean up the generated QR code
-        fs.unlinkSync(qrcodePath);
+        // fs.unlinkSync(qrcodePath);
 
         return res.status(200).json({ message: "Registration successful" });
     } catch (error) {
