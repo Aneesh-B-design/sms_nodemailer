@@ -1,5 +1,5 @@
 const express = require("express");
-// const multer = require("multer");
+const multer = require("multer");
 const QRCode = require("qrcode");
 const nodemailer = require("nodemailer");
 // const fs = require("fs");
@@ -21,7 +21,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Set up Multer for handling file uploads
-// const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "uploads/" });
 
 
 // Serve the 'qrcodes' directory as static files
