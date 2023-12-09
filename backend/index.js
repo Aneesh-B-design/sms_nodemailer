@@ -1,15 +1,12 @@
 const express = require("express");
-// const multer = require("multer");
 const QRCode = require("qrcode");
 const nodemailer = require("nodemailer");
-// const fs = require("fs");
 const cors = require("cors");
+const twilio = require('twilio');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-
 
 // Nodemailer configuration
 const transporter = nodemailer.createTransport({
@@ -20,19 +17,17 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-// Set up Multer for handling file uploads
-// const upload = multer({ dest: "uploads/" });
+// Twilio configuration
+const accountSid = "AC6257525feb09ab6296b44e809d23a47b"
+const authToken = "3eb3e0b0124ead6c4bc49efc44bcc6f4"
+const twilioClient = twilio(accountSid, authToken);
 
+app.get('/', (req, res) => {
+    res.send('hello');
+});
 
 // Serve the 'qrcodes' directory as static files
 app.use(express.static("qrcodes"));
-
-// Route to serve the frontend
-app.use(express.static("public"));
-
-app.get('/', (req, res) => {
-    res.send('hello')
-})
 
 // Route to handle registration
 app.post("/register", async (req, res) => {
@@ -51,296 +46,179 @@ app.post("/register", async (req, res) => {
         // Create HTML content with embedded QR code
         const htmlContent = `
             
-            <center style="  width: 100%;
-            table-layout: fixed;
-            background-color: white;">
-<table style="width: 100%;
-padding-top: 3em !important;
-margin: 0;
-padding: 0;
-max-width: 400px;
-background-image: linear-gradient(0deg, rgba(235, 192, 72, 1),rgba(255, 255, 255, 1)); border-spacing: 0;" width="100%">
-  
-    <tr style="">
-<td style="padding: 0; margin: 0;" align="center">
-<table style="border-spacing: 0;" width="100%">
-    <tr align="center">
-        <td class="two-columns" style="
-            padding: 0;
-            font-size: 0;
-            max-width: 100%;
-            display: flex;
-            padding-left: 4em;
-                padding-right: 4em;
-         
-        ">
-            <table class="column2" style="
-            
-                border-spacing: 0;
-                display: inline-block;
-                max-width: 400px;
-                width: 100%;
-                vertical-align: top;
-                padding-bottom: 4%;
-            ">
-                <tr>
-                    <td class="padding" style="padding: 0;">
-                        <table class="content" style="border-spacing: 0;width: 100%;">
-                            <tr>
-                                <td style="padding: 0;">
-                                    <!-- <p style="
-                                        font-size: 12px;
-                                        font-weight: 700;
-                                        margin: 0;
-                                        padding: 0;
-                                        margin-bottom: 1em;
-                                       
-                                        font-family: arial;
-                                    ">
-                                        Let's make the Boiler World more energetic! Steam Up!
-                                    </p> -->
-                                  <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/logo1.png" width="40%"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 0; margin: 0;" align="center"></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-              <table class="column2" style="
-                margin-top: 1%;
-                border-spacing: 0;
-                display: inline-block;
-                max-width: 100px;
-                width: 100%;
-                vertical-align: top;
-                margin-top: 5%;
-            
-            ">
-                <tr>
-                    <td class="padding" style="padding: 0;">
-                        <table class="content" style="border-spacing: 0;width: 100%;">
-                            <tr>
-                                <td style="padding: 0;">
-                                    <p style="
-                                        font-size: 20px;
-                                        font-weight: 300;
-                                        margin: 0;
-                                        padding: 0;
-                                        margin-bottom: 1em;
-                                       
-                                     font-family: 'Poppins', sans-serif;
-                                    ">
-                            A BLOCK
-                                    </p>
-                                  <!-- <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/logo1.png" width="50%"/> -->
-                                </td>
-                            </tr>
-                           
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
-</td>
-</tr>
-<tr>
-<td align="center">
-<div>
-
-
-<img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/suhani.png"  class="" width="300" style="max-width:100%; " />
-  </div>
-<i style=" font-family: 'Poppins', sans-serif;">  LIVE at Nagpur</i>
-<div>
-
-
-<i style=" font-family: 'Poppins', sans-serif; font-size: 11.3px; font-weight: 600;">Program to start with Orchestra by Divyang Children.</i>
-</div>
-</td>
-</tr>
-
-
-  
-    <tr style="">
-<td style="padding: 0; margin: 0;" align="center" >
-<table style="border-spacing: 0;" width="100%">
-    <tr >
-        <td class="two-columns" style="
-           
-            font-size: 0;
-            max-width: 100%;
-            display: flex;
-         
-        " > 
-            <table class="column2" style="
-            
-                border-spacing: 0;
-                display: inline-block;
-                max-width: 400px;
-                width: 100%;
-                vertical-align: top;
-                padding-bottom: 4%;
-            ">
-                <tr>
-                    <td class="padding" style="padding: 0;">
-                        <table class="content" style="border-spacing: 0;width: 100%;">
-                            <tr>
-                                <td style="padding: 0;">
-                                    <div style="display: flex; gap: 0.3em;">
-
-                                 
-                                    <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/clock.png"  width="20" height="20"  />
-                                    <p style="
-                                        font-size: 16px;
-                                        font-weight: 700;
-                                      
-                                    
-                                       
-                                  font-family: 'Poppins', sans-serif;
-                                    ">
-                                        8 p.m to 10 p.m
-                                    </p>
-                                       </div>
-                                  <!-- <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/logo1.png" width="40%"/> -->
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 0; margin: 0;" align="center"></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <table class="column2" style="
-            
-                border-spacing: 0;
-                display: inline-block;
-                max-width: 20px;
-                width: 100%;
-                vertical-align: top;
-                 margin-top: 2%;
-               
-            ">
-                <tr>
-                    <td class="padding" style="padding: 0;" >
-                        <table class="content" style="border-spacing: 0;width: 100%;">
-                            <tr>
-                                <td style="padding: 0;  " >
-                              
-
-                            
-                                 <div style="border-left: 2px solid black ; height: 30px;  "></div>
-                                 
-                                  <!-- <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/logo1.png" width="40%"/> -->
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 0; margin: 0;" align="center"></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-             <table class="column2" style="
-            
-                border-spacing: 0;
-                display: inline-block;
-                max-width: 400px;
-                width: 100%;
-                vertical-align: top;
-      
-            ">
-                <tr>
-                    <td class="padding" style="padding: 0;">
-                        <table class="content" style="border-spacing: 0;width: 100%;">
-                            <tr>
-                                <td style="padding: 0;">
-                                    <div style="display: flex; gap: 0.3em;">
-
-                                 
-                                    <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/calendar.png"  width="20" height="20"/>
-                                    <p style="
-                                        font-size: 16px;
-                                        font-weight: 700;
-                                      
-                                    
-                                       
-                                        font-family: 'Poppins', sans-serif;
-                                    ">
-                                  25 Jan 2024
-                                    </p>
-                                       </div>
-                                  <!-- <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/logo1.png" width="40%"/> -->
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 0; margin: 0;" align="center"></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
-</td>
-</tr>
-
+        <center style="width: 100%; table-layout: fixed; background-color: white">
+        <table style="
+              width: 100%;
+              padding-top: 2em !important;
     
-<tr>
-    <td>
-        <div  style="display: flex; align-items: center; gap: 0.4em;">
-
-   
-        <div>
-            <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/location.png"  width="20" height="20" />
-        </div>
-        <div>
-            <p style="margin: 0; padding: 0;  font-size: 16px;
-                                        font-weight: 700;
-                                      
-                                    
-                                       
-                                  font-family: 'Poppins', sans-serif;">
-                Suresh Bhat Auditorium
-
-            </p>
-            <p style="margin: 0; padding: 0; font-size: 15px;">44Q6+373, Great Nag Rd, Reshim Bagh, Nagpur, Maharashtra 440009</p>
-        </div>
-             </div>
-    </td>
-</tr>
-
-   <tr>
-    <td align="center">
-               <div style="margin: 3em 0;">
-
-
-<img src="cid:qrcode"  class="" width="200" style="max-width:100%; " />
-  </div>
-    </td>
-   </tr>
-        <tr>
-    <td align="center" style="padding: 0; margin: 0;">
-               <div style="padding: 0; margin: 0;">
-
-
-<img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/SUHANISHAHPIC.png"  class=""  style="max-width:100%; padding: 0; margin: 0; " />
-  </div>
-    </td>
-   </tr>
-     
-
-
-
-
-</table>
-</center>
+              padding-bottom: 0em !important;
+              margin: 0 !important;
+              max-width: 400px;
+              background-image: linear-gradient(
+                0deg,
+                rgba(235, 192, 72, 1),
+                rgba(255, 255, 255, 1)
+              );
+              border-spacing: 0;
+            " width="100%">
+          <tr style="">
+            <td style="padding: 0; margin: 0" align="center">
+              <table style="
+                    border-spacing: 0;
+                    padding-left: 1em !important;
+                  
+                  " width="100%">
+                <tr align="center">
+                  <td class="two-columns" style="
+                        padding: 0;
+                        font-size: 0;
+                        max-width: 100%;
+                        display: flex;
+                      ">
+                    <table class="column2" style="
+                          border-spacing: 0;
+                          display: inline-block;
+                          max-width: 170px;
+                          width: 100%;
+                          vertical-align: top;
+                          padding-bottom: 0%;
+                        ">
+                      <tr>
+                        <td class="padding" style="padding: 0">
+                          <table class="content" style="border-spacing: 0; width: 100%">
+                            <tr>
+                              <td style="padding: 0">
+    
+                                <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/logo1.png"
+                                  width="90%" />
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                    <table class="column2" style="
+                          border-spacing: 0;
+                          display: inline-block;
+                          max-width: 600px;
+                          width: 100%;
+                          vertical-align: top;
+                          padding-bottom: 0%;
+                          margin-top: 6%;
+                        ">
+                      <tr>
+                        <td class="padding" style="padding: 0">
+                          <table class="content" style="border-spacing: 0; width: 100%">
+                            <tr>
+                              <td style="padding: 0">
+    
+                                <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/helplink.png"
+                                  width="50%" />
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                    <table class="column2" style="
+                          margin-top: 1%;
+                          border-spacing: 0;
+                          display: inline-block;
+                          max-width: 100px;
+                          width: 100%;
+                          vertical-align: top;
+                          margin-top: 3%;
+                        ">
+                      <tr>
+                        <td class="padding" style="padding: 0">
+                          <table class="content" style="border-spacing: 0; width: 100%">
+                            <tr>
+                              <td style="padding: 0">
+                                <p style="
+                                      font-size: 17.5px;
+                                      font-weight: 700;
+                                      margin: 0;
+                                      padding: 0;
+    
+                                      font-family: 'Poppins', sans-serif;
+                                    ">
+                                  A BLOCK
+                                </p>
+                                <!-- <img src="./images/logo1.png" width="50%"/> -->
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td align="center">
+              <div>
+                <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/raisoni.png" class="" width="150"
+                  style="max-width: 100%; margin-top: 7%" />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td align="center">
+              <div>
+                <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/suhani.png" class="" width="250"
+                  style="max-width: 100%" />
+              </div>
+    
+              <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/locationreddot.png" width="8" />
+              <i style="
+                    font-family: 'Poppins', sans-serif;
+                    font-size: 14px;
+                    margin: 0;
+                    padding: 0;
+                  ">
+                LIVE at Nagpur</i>
+    
+              <div>
+                <i style="
+                      font-family: 'Poppins', sans-serif;
+                      font-size: 10px;
+                      font-weight: 600;
+                    ">Program to start with Orchestra by Sur Sangam.</i>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td align="center">
+              <div>
+                <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/clockcalender.png" class=""
+                  width="320" style="max-width: 100%; margin-top: 4%" />
+              </div>
+            </td>
+          </tr>
+    
+    
+          <tr>
+            <td align="center">
+              <div style="margin: 2em 0">
+                <img src="cid:qrcode" class="" width="200"
+                  style="max-width: 100%" />
+              </div>
+            </td>
+          </tr>
+    
+          <tr>
+            <td align="center" style="padding: 0; margin: 0">
+              <div>
+                <img src="https://sms.procohat.tech/wp-content/uploads/2023/12/images/suhanishah.png" class="" width="600"
+                  style="max-width: 100%; margin-top: 0%" />
+              </div>
+            </td>
+          </tr>
+        </table>
+      </center>
+  
 
         `;
 
@@ -354,12 +232,16 @@ background-image: linear-gradient(0deg, rgba(235, 192, 72, 1),rgba(255, 255, 255
                 {
                     filename: `${qrcodeFilename}.png`,
                     path: qrcodePath,
-                    cid: "qrcode", // Content ID for embedding in HTML
+                    cid: 'qrcode', // Content ID for embedding in HTML
                 },
             ],
         };
 
         await transporter.sendMail(mailOptions);
+
+        // Send WhatsApp message
+        const whatsappTo = '+918446099850'; // Replace with the recipient's phone number
+        await sendWhatsAppMessage(qrcodePath, whatsappTo);
 
         // Clean up the generated QR code
         // fs.unlinkSync(qrcodePath);
@@ -382,8 +264,23 @@ const generateQRCode = async (qrcodeData, filename) => {
     }
 };
 
+// Function to send WhatsApp message using Twilio
+const sendWhatsAppMessage = async (mediaUrl, to) => {
+    try {
+        await twilioClient.messages.create({
+            from: 'whatsapp:+14155238886',
+            body: 'Hello there!',
+            to: `whatsapp:${to}`,
+            mediaUrl: `cid:qrcode`, // Content ID for referencing the embedded image
+        });
+        console.log('WhatsApp message sent successfully');
+    } catch (error) {
+        console.error('Error sending WhatsApp message:', error);
+    }
+};
+
 // Start the server
-const PORT = 3000;
+const PORT = 4000;
 app.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`);
 });
